@@ -1,73 +1,50 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { render, fireEvent } from '@testing-library/react-native';
+import Header from './Header';
 
-const Header: React.FC = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image source={require('../../assets/logo.png')} style={styles.logo} />
-      </View>
-      <View style={styles.navbar}>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log('Início pressed')}>
-          <Text style={styles.navLink}>Início</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log('Livros pressed')}>
-          <Text style={styles.navLink}>Livros</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => console.log('Contato pressed')}>
-          <Text style={styles.navLink}>Contato</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.ctaContainer}>
-        <TouchableOpacity style={styles.ctaItem} onPress={() => console.log('Login pressed')}>
-          <Image source={require('../../assets/user.svg')} style={styles.ctaIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.ctaItem} onPress={() => console.log('Cart pressed')}>
-          <Image source={require('../../assets/cart.svg')} style={styles.ctaIcon} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
+describe('Header', () => {
+  it('renders correctly', () => {
+    const { getByTestId } = render(<Header />);
+    const headerContainer = getByTestId('header-container');
+    expect(headerContainer).toBeTruthy();
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff', // Fundo branco
-    padding: 10,
-  },
-  logoContainer: {
-    backgroundColor: '#fff', // Fundo branco
-    padding: 10,
-    borderRadius: 10,
-  },
-  logo: {
-    height: 60, // Ajuste a altura conforme necessário
-    width: 200, // Ajuste a largura conforme necessário
-  },
-  navbar: {
-    flexDirection: 'row',
-    marginLeft: 'auto', // Move os itens para a direita
-  },
-  navItem: {
-    marginHorizontal: 10,
-  },
-  navLink: {
-    color: '#666', // Fonte cinza
-    fontSize: 18, // Ajuste o tamanho da fonte conforme necessário
-  },
-  ctaContainer: {
-    flexDirection: 'row',
-  },
-  ctaItem: {
-    marginLeft: 10,
-  },
-  ctaIcon: {
-    height: 20,
-    width: 20,
-  },
+    const logo = getByTestId('logo');
+    expect(logo).toBeTruthy();
+
+    const navbar = getByTestId('navbar');
+    expect(navbar).toBeTruthy();
+
+    const ctaContainer = getByTestId('cta-container');
+    expect(ctaContainer).toBeTruthy();
+  });
+
+  it('calls the onPress function for each navItem', () => {
+    const onPressMock = jest.fn();
+    const { getByText } = render(<Header />);
+    
+    const inicioNavItem = getByText('Início');
+    fireEvent.press(inicioNavItem);
+    expect(onPressMock).toHaveBeenCalledTimes(1);
+
+    const livrosNavItem = getByText('Livros');
+    fireEvent.press(livrosNavItem);
+    expect(onPressMock).toHaveBeenCalledTimes(2);
+
+    const contatoNavItem = getByText('Contato');
+    fireEvent.press(contatoNavItem);
+    expect(onPressMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('calls the onPress function for each ctaItem', () => {
+    const onPressMock = jest.fn();
+    const { getByTestId } = render(<Header />);
+    
+    const loginCtaItem = getByTestId('login-cta');
+    fireEvent.press(loginCtaItem);
+    expect(onPressMock).toHaveBeenCalledTimes(1);
+
+    const cartCtaItem = getByTestId('cart-cta');
+    fireEvent.press(cartCtaItem);
+    expect(onPressMock).toHaveBeenCalledTimes(2);
+  });
 });
-
-export default Header;

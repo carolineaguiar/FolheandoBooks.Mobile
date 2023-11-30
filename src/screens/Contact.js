@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import Header from '../components/Header';
-import Hero from '../components/Hero';
-import Why from '../components/Why';
-import PopularProducts from '../components/PopularProducts';
+import ContactForm  from '../components/ContactForm';
+import Footer from '../components/Footer';
 
 const HomeScreen = () => {
   return (
     <View>
       <Header />
-      <Hero />
-      <Why />
-      <PopularProducts />
+      <ContactForm />
+
+
+      <Footer />
       {/* Restante do seu código aqui */}
     </View>
   );
